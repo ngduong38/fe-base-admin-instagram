@@ -1,8 +1,23 @@
 import { NavLink } from "react-router-dom"
 import {FaUserAlt, FaAngleLeft, FaCircleNotch} from "react-icons/fa"
+import { useEffect } from "react";
 
 export default function MainSidebar() {
+    useEffect(() => {
+        document.querySelectorAll('.main-sidebar .nav-sidebar > .nav-item').forEach( (item) => {
+            item.querySelector('.nav-link').addEventListener('click', function (e) {
+                e.preventDefault();
 
+                if (item.classList.contains('menu-is-opening') && item.classList.contains('menu-open')) {
+                    item.classList.remove('menu-is-opening');
+                    item.classList.remove('menu-open');
+                } else {
+                    item.classList.add('menu-is-opening');
+                    item.classList.add('menu-open');
+                }
+            })
+        });
+    }, [])
     return(
         <>
             <div className="main-sidebar sidebar-dark-primary">
@@ -52,13 +67,60 @@ export default function MainSidebar() {
                                         </li>
                                         <li className="nav-item">
                                             <NavLink
-                                                to={'user/create'}
+                                                to={'users/create'}
                                                 className={"nav-link"}
                                                 end
                                             >  
                                                 <FaCircleNotch className="nav-icon"/>
                                                 <p>
                                                     Thêm mới Users
+                                                </p>
+                                            </NavLink>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li className="nav-item menu-open menu-is-opening">
+                                    <a href="http://localhost:3000/" className="nav-link active">
+                                        <FaUserAlt className="nav-icon"/>
+                                        <p>
+                                            Quản lý Post
+                                            <FaAngleLeft className="right"/>
+                                        </p>
+                                    </a>
+                                    <ul className="nav nav-treeview">
+                                        <li className="nav-item">
+                                            <NavLink
+                                                to={'posts'}
+                                                className={"nav-link"}
+                                                end
+                                            >   
+                                                <FaCircleNotch className="nav-icon"/>
+                                                <p>
+                                                    Danh sách thêm mới Post
+                                                </p>
+                                            </NavLink>
+                                        </li>
+                                        <li className="nav-item">
+                                            <NavLink
+                                                to={'posts/media'}
+                                                className={"nav-link"}
+                                                end
+                                            >  
+                                                <FaCircleNotch className="nav-icon"/>
+                                                <p>
+                                                    Media
+                                                </p>
+                                            </NavLink>
+                                        </li>
+                                        <li className="nav-item">
+                                            <NavLink
+                                                to={'posts/comments'}
+                                                className={"nav-link"}
+                                                end
+                                            >  
+                                                <FaCircleNotch className="nav-icon"/>
+                                                <p>
+                                                    Comments
                                                 </p>
                                             </NavLink>
                                         </li>

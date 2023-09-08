@@ -10,9 +10,9 @@ export default function Layout() {
             <div id="main"  className="sidebar-mini layout-fixed">
                 <div className="wrapper container-fluid p-0">
                     <Navigation/>
-                    <MainSidebar />
+                    <MainSidebar/>
                     <div className="content-wrapper">
-                        <Outlet/>
+                       <Outlet/>
                     </div>
                     <MainFooter/>
                 </div>
