@@ -6,11 +6,15 @@ import UserEdit from "../pages/users/edit";
 import UserCreate from "../pages/users/create";
 import PostIndex from "../pages/posts";
 import PostsEdit from "../pages/posts/edit";
+import AuthLayout from "../pages/auth/authLayout";
+import Login from "../pages/auth/login";
+import ErrorPage from "../pages/error-page";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Layout/>,
+        errorElement: <ErrorPage/>,
         children: [
             {
                 index: true,
@@ -45,6 +49,17 @@ const router = createBrowserRouter([
                         element: <PostsEdit/>,
                     },
                 ]
+            }
+        ]
+    },
+    {
+        path: "/",
+        element: <AuthLayout/>,
+        errorElement: <ErrorPage/>,
+        children: [
+            {
+                path: "/login",
+                element: <Login/>,
             }
         ]
     }

@@ -1,13 +1,19 @@
-import {USER} from "../../../helpers/constants"
+import {GENDER, USER} from "../../../helpers/constants"
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import userApis from "../../../api/Baseadmin/user";
+import { useParams, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-export default function UserFormElement({isUpdate = false}) {
+export default function UserFormElement({isUpdate = false}) 
+{
     const {
         register,
         handleSubmit,
         formState: { errors },
+        setValue,
         setError,
-        setValue
+
     } = useForm({
         defaultValues: {
             name: '',
@@ -15,10 +21,76 @@ export default function UserFormElement({isUpdate = false}) {
             level: USER.levels.user.value.toString()
         }
     });
+    let urlParams = useParams();
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        if (isUpdate) {
+            (
+                async () => {
+                    const userResponse = await userApis.show(urlParams.userId);
+                    
+                    if (userResponse.success) {
+                        setValue('name', userResponse.data.name)
+                        setValue('email', userResponse.data.email)
+                        setValue('phone', userResponse.data.phone)
+                        setValue('gender', userResponse.data.gender.toString())
+                        setValue('level', userResponse.data.level.toString())
+                    }
+                }
+            )()
+        }
+    }, [isUpdate,urlParams])
+
+    const store = async (data) => {
+        const userResponse = await userApis.store(data);
+
+        if (userResponse.success) {
+            navigate("/users");
+            toast.success(() => <p>Thêm mới user <b>{userResponse.data.name}</b> thành công! </p>);
+
+            return;
+        }
+
+        if (!userResponse.errors.length) {
+            toast.error(() => <p>Thêm mới user <b>{userResponse.data.name}</b> thất bại! </p> );
+
+            return;
+        }
+        userResponse.error.forEach((error) => {
+            const [key, value] = Object.entries(error)[0]
+            setError(key, {
+                type: 'server',
+                message: value.message
+            })
+        })
+    }
+
+    const update = async (data) => {
+        const userResponse = await userApis.update(urlParams.userId, data)
+
+        if (userResponse.success) {
+            toast.success(() => <p>Chỉnh sửa user <b>{data.name}</b> thành công!</p>);
+
+            return;
+        }
+
+        if (!userResponse.error.length) {
+            toast.error(() => <p>Chỉnh sửa user <b>{data.name}</b> thất bại!</p>);
+        }
+        userResponse.error.forEach((error) => {
+            const [key, value] = Object.entries(error)[0];
+            setError(key, {
+                type: 'server',
+                message: value.message
+            })
+        })
+    }   
+
 
     return (
         <>
-            <form>
+            <form onSubmit={handleSubmit(isUpdate ? update : store)}>
                 <div className="p-3 col-6">
                     <div className="mb-3">
                         <label htmlFor="inputName" className="form-label">Họ tên <span className={'text-danger fw-bold'}>*</span></label>
@@ -72,6 +144,36 @@ export default function UserFormElement({isUpdate = false}) {
                             })}
                         />
                         {errors.phone && <p className={'text-danger fw-bold'}>{errors.phone.message}</p>}
+                    </div>
+                    <div className={'mb-3'}>
+                        <div>
+                            <label className="form-label">Giới tính <span className={'text-danger fw-bold'}>*</span></label>
+                        </div>
+                        <div className="form-check form-check-inline">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                id="inputLevelAdmin"
+                                value={GENDER.gender.male.value.toString()}
+                                {...register('gender')}
+                            />
+                            <label className="form-check-label" htmlFor="inputLevelAdmin">
+                                { GENDER.gender.male.label }
+                            </label>
+                        </div>
+                        <div className="form-check form-check-inline">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                id="inputLevelUser"
+                                value={GENDER.gender.female.value.toString()}
+                                {...register('gender')}
+                            />
+                            <label className="form-check-label" htmlFor="inputLevelUser">
+                                { GENDER.gender.female.label }
+                            </label>
+                        </div>
+                        {errors.level && <p className={'text-danger fw-bold'}>{errors.level.message}</p>}
                     </div>
                     <div className={'mb-3'}>
                         <div>

@@ -2,7 +2,14 @@
     position: relative;
     .nav-item {
         >.nav-link {
+            display: flex;
             position: relative;
+            >p{
+                margin-left: 10px;
+            }
+            >svg{
+                height: 1.5rem;
+            }
         }
         .nav-link {
             width: calc(250px - 0.5rem *2);

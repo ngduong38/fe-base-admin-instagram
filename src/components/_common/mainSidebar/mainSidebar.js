@@ -96,7 +96,7 @@ export default function MainSidebar() {
                                             >   
                                                 <FaCircleNotch className="nav-icon"/>
                                                 <p>
-                                                    Danh sách thêm mới Post
+                                                    Danh sách Post
                                                 </p>
                                             </NavLink>
                                         </li>

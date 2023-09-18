@@ -1,7 +1,10 @@
 import Navigation from "../navigation/navigation.js"
 import MainSidebar from "../components/_common/mainSidebar/mainSidebar.js"
 import MainFooter from "../components/_common/footer/footer.js"
-import { Outlet } from "react-router-dom"
+import { Outlet} from "react-router-dom"
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function Layout() {
 
@@ -15,6 +18,19 @@ export default function Layout() {
                        <Outlet/>
                     </div>
                     <MainFooter/>
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={5000}
+                        hideProgressBar={false}
+                        newestOnTop={true}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="light"
+                        style={{ width: "400px" }}
+                    />
                 </div>
 
             </div>
